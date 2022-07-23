@@ -1,24 +1,31 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Popup } from "react-map-gl";
 import { useEffect, useState } from "react";
-import useWindowSize from '../hooks/useWindowSize';
 import { initialViewState, MapStyle } from "../constants";
 import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
-import MapPageWrapper from '../components/mapPageWrapper';
 import ShowSideMenuToggle from '../components/showSideMenuToggle';
 import FullScreenMap from '../components/fullScreenMap';
+import dynamic from 'next/dynamic';
+
+const MapPageWrapper = dynamic(
+  () => import('../components/mapPageWrapper'), 
+  { ssr: false }
+);
 
 // Check out FlowMapBlue
 const MapPage = () => {
-  const windowSize = useWindowSize();
   const [showSideMenu, setShowSideMenu] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewState, setViewState] = useState(initialViewState);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const isMobile = windowSize[0] < 640;
+  const getIsMobile = (width: number) => {
+    setIsMobile(width < 640);
+  } 
 
+  console.log(isMobile);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -33,14 +40,14 @@ const MapPage = () => {
   }, []);
 
   return (
-    <MapPageWrapper>
+    <MapPageWrapper handleChange={getIsMobile}>
       {/* Side menu hides by default when on mobile */}
-      <div className={`side-menu ${isMobile && !showSideMenu ? '-left-40 opacity-0 ' : ''}`}>
+      {/* <div className={`side-menu ${isMobile && !showSideMenu ? '-left-40 opacity-0 ' : ''}`}>
         <h1 className="text-3xl font-bold text-center">Where2</h1>
         <MyPlacesMenu handleClick={(showPopup: boolean) => setShowPopup(showPopup)} />
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
       </div>
-      <ShowSideMenuToggle showToggle={isMobile} showSideMenu={showSideMenu} handleToggle={setShowSideMenu} />
+      <ShowSideMenuToggle showToggle={isMobile} showSideMenu={showSideMenu} handleToggle={setShowSideMenu} /> */}
 
       <FullScreenMap viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
         {showPopup && (
