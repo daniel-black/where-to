@@ -42,7 +42,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
 
       if (location && props.marker) {
         setMarker(
-          <Marker {...props.marker} longitude={location[0]} latitude={location[1]}>
+          <Marker {...props.marker} longitude={location[0]} latitude={location[1]} draggable={false}>
             <GeocodingResult {...result} />
             {/* <div className='bg-white p-4'>{location[0]}, {location[1]}</div> */}
           </Marker>
