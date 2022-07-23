@@ -7,6 +7,7 @@ import MyPlacesMenu from "../components/myPlacesMenu";
 import ShowSideMenuToggle from '../components/showSideMenuToggle';
 import dynamic from 'next/dynamic';
 import FullMap from '../components/fullMap';
+import UserLocationMarker from '../components/userLocationMarker';
 
 const MapPageWrapper = dynamic(
   () => import('../components/mapPageWrapper'), 
@@ -24,18 +25,6 @@ const MapPage = () => {
   const handleWindowSizeChange = (width: number) => {
     setIsMobile(width < 640);
   } 
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      setViewState({
-        ...viewState,
-        latitude: pos.coords.latitude,
-        longitude: pos.coords.longitude,
-        zoom: 3.5
-      })
-    })
-    console.log(viewState)
-  }, []);
 
   return (
     <MapPageWrapper handleChange={handleWindowSizeChange}>
@@ -57,6 +46,7 @@ const MapPage = () => {
             </div>
           </Popup>
         )}
+        <UserLocationMarker />
       </FullMap>
       
     </MapPageWrapper>
