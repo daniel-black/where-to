@@ -1,27 +1,32 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Popup } from "react-map-gl";
-import { useState } from "react";
-import { MapStyle } from "../constants";
+import { Marker, Popup } from "react-map-gl";
+import { useEffect, useState } from "react";
+import { initialViewState, MapStyle } from "../constants";
 import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
-import FullScreenMap from "../components/FullScreenMap";
+import MapPageWrapper from '../components/mapPageWrapper';
+import FullScreenMap from '../components/FullScreenMap';
 
 // Check out FlowMapBlue
 const MapPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
-  const [viewState, setViewState] = useState({
-    longitude: -102,
-    latitude: 38.3,
-    zoom: 4,
-    bearing: 0,
-    pitch: 10,
-    padding: { top: 0, bottom: 0, left: 0, right: 0 }
-  });
+  const [viewState, setViewState] = useState(initialViewState);
 
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setViewState({
+        ...viewState,
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+        zoom: 3.5
+      })
+    })
+    console.log(viewState)
+  }, []);
 
   return (
-    <div className="relative">
+    <MapPageWrapper>
       <div className="side-menu">
         <h1 className="text-3xl font-bold text-center">Where2</h1>
         <MyPlacesMenu handleClick={(showPopup: boolean) => setShowPopup(showPopup)} />
@@ -38,8 +43,11 @@ const MapPage = () => {
             </div>
           </Popup>
         )}
+        {/* <Marker {...viewState}>
+          <p className='bg-white p-1 rounded'>Home</p>
+        </Marker> */}
       </FullScreenMap>
-    </div>
+    </MapPageWrapper>
   );
 }
 
