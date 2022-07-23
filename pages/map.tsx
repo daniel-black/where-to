@@ -21,11 +21,9 @@ const MapPage = () => {
   const [viewState, setViewState] = useState(initialViewState);
   const [isMobile, setIsMobile] = useState(false);
 
-  const getIsMobile = (width: number) => {
+  const handleWindowSizeChange = (width: number) => {
     setIsMobile(width < 640);
   } 
-
-  console.log(isMobile);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -40,14 +38,14 @@ const MapPage = () => {
   }, []);
 
   return (
-    <MapPageWrapper handleChange={getIsMobile}>
+    <MapPageWrapper handleChange={handleWindowSizeChange}>
       {/* Side menu hides by default when on mobile */}
-      {/* <div className={`side-menu ${isMobile && !showSideMenu ? '-left-40 opacity-0 ' : ''}`}>
+      <div className={`side-menu ${isMobile && !showSideMenu ? '-left-40 opacity-0 ' : ''}`}>
         <h1 className="text-3xl font-bold text-center">Where2</h1>
         <MyPlacesMenu handleClick={(showPopup: boolean) => setShowPopup(showPopup)} />
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
       </div>
-      <ShowSideMenuToggle showToggle={isMobile} showSideMenu={showSideMenu} handleToggle={setShowSideMenu} /> */}
+      <ShowSideMenuToggle showToggle={isMobile} showSideMenu={showSideMenu} handleToggle={setShowSideMenu} />
 
       <FullScreenMap viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
         {showPopup && (
