@@ -1,13 +1,13 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Marker, Popup } from "react-map-gl";
+import { Popup } from "react-map-gl";
 import { useEffect, useState } from "react";
 import useWindowSize from '../hooks/useWindowSize';
 import { initialViewState, MapStyle } from "../constants";
 import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
 import MapPageWrapper from '../components/mapPageWrapper';
-import FullScreenMap from '../components/fullScreenMap';
 import ShowSideMenuToggle from '../components/showSideMenuToggle';
+import FullScreenMap from '../components/fullScreenMap';
 
 // Check out FlowMapBlue
 const MapPage = () => {
@@ -52,10 +52,7 @@ const MapPage = () => {
             </div>
           </Popup>
         )}
-        {/* <Marker {...viewState}>
-          <p className='bg-white p-1 rounded'>Home</p>
-        </Marker> */}
-      </FullScreenMap>
+      </FullScreenMap>      
     </MapPageWrapper>
   );
 }
