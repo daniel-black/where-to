@@ -1,7 +1,7 @@
-import { MapStyle } from "../constants";
+import { MapStyle, MapStyleKey } from "../constants";
 import { SelectMapStyleProps } from "./selectMapStyle";
 
-type MapStyleCheckboxProps = SelectMapStyleProps & { styleKey: 'Dark' | 'Light' | 'Outdoors' }
+type MapStyleCheckboxProps = SelectMapStyleProps & { styleKey: MapStyleKey }
 
 const MapStyleCheckbox = (props: MapStyleCheckboxProps) => {
   return (

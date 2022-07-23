@@ -9,4 +9,4 @@ export enum MapStyle {
   'Navigation Night' = 'mapbox://styles/mapbox/navigation-night-v1',
 }
 
-export type MapStyleKey = 'Outdoor' | 'Dark' | 'Light' | 'Streets' | 'Satellite' | 'Satellite Streets' | 'Navigation Day' | 'Navigation Night';
+export type MapStyleKey = 'Outdoors' | 'Dark' | 'Light' | 'Streets' | 'Satellite' | 'Satellite Streets' | 'Navigation Day' | 'Navigation Night';

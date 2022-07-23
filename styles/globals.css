@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+ 
+@layer components {
+  .side-menu {
+    @apply z-10 absolute left-0 top-0 bg-slate-700 opacity-95 h-full w-64 shadow-xl border-r-2 border-slate-800 divide-y-2 divide-slate-800;
+  }
+}
