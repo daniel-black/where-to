@@ -1,17 +1,24 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Marker, Popup } from "react-map-gl";
 import { useEffect, useState } from "react";
+import useWindowSize from '../hooks/useWindowSize';
 import { initialViewState, MapStyle } from "../constants";
 import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
 import MapPageWrapper from '../components/mapPageWrapper';
-import FullScreenMap from '../components/FullScreenMap';
+import FullScreenMap from '../components/fullScreenMap';
+import ShowSideMenuToggle from '../components/showSideMenuToggle';
 
 // Check out FlowMapBlue
 const MapPage = () => {
+  const windowSize = useWindowSize();
+  const [showSideMenu, setShowSideMenu] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewState, setViewState] = useState(initialViewState);
+
+  const isMobile = windowSize[0] < 640;
+
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -27,11 +34,13 @@ const MapPage = () => {
 
   return (
     <MapPageWrapper>
-      <div className="side-menu">
+      {/* Side menu hides by default when on mobile */}
+      <div className={`side-menu ${isMobile && !showSideMenu ? '-left-40 opacity-0 ' : ''}`}>
         <h1 className="text-3xl font-bold text-center">Where2</h1>
         <MyPlacesMenu handleClick={(showPopup: boolean) => setShowPopup(showPopup)} />
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
       </div>
+      <ShowSideMenuToggle showToggle={isMobile} showSideMenu={showSideMenu} handleToggle={setShowSideMenu} />
 
       <FullScreenMap viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
         {showPopup && (
