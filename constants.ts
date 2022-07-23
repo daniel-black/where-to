@@ -11,11 +11,14 @@ export enum MapStyle {
 
 export type MapStyleKey = 'Outdoors' | 'Dark' | 'Light' | 'Streets' | 'Satellite' | 'Satellite Streets' | 'Navigation Day' | 'Navigation Night';
 
-export const initialViewState = {
+export interface Viewport {
+  longitude: number,
+  latitude: number,
+  zoom: number
+};
+
+export const initialViewport: Viewport = {
   longitude: -102,
   latitude: 38.3,
   zoom: 4,
-  bearing: 0,
-  pitch: 10,
-  padding: { top: 0, bottom: 0, left: 0, right: 0 }
 };
