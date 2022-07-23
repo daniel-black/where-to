@@ -1,21 +1,23 @@
-import 'mapbox-gl/dist/mapbox-gl.css';
-import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
+import { initialViewport, MapStyle } from "../constants";
 import { Popup } from "react-map-gl";
+import dynamic from 'next/dynamic';
 import { useState } from "react";
-import { initialViewport, Viewport, MapStyle } from "../constants";
+
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+import UserLocationMarker from '../components/userLocationMarker';
+import ShowSideMenuToggle from '../components/showSideMenuToggle';
+import GeocoderControl from '../components/geocoderControl';
 import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
-import ShowSideMenuToggle from '../components/showSideMenuToggle';
-import dynamic from 'next/dynamic';
 import FullMap from '../components/fullMap';
-import UserLocationMarker from '../components/userLocationMarker';
-import GeocoderControl from '../components/geocoderControl';
-// import { GeoJsonLayer } from 'deck.gl';
-
 const MapPageWrapper = dynamic(
   () => import('../components/mapPageWrapper'), 
   { ssr: false }
 );
+
+
 
 // Check out FlowMapBlue
 const MapPage = () => {

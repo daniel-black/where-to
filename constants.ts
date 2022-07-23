@@ -22,3 +22,30 @@ export const initialViewport: Viewport = {
   latitude: 38.3,
   zoom: 4,
 };
+
+export interface Place {
+  id: string,
+  place_name: string,
+  'place_name_en-US': string,
+  text: string,
+  'text_en-US': string,
+  center: number[],
+  bbox: number[],
+  geometry?: {
+    coordinates: number[],
+    type: string
+  },
+  place_type: string[],
+  type?: string,
+  context?: Context[],
+  properties?: Object
+}
+
+export interface Context {
+  id: string,
+  language: string,
+  'language_en-US': string,
+  text: string,
+  'text_en-US': string,
+  wikidata: string
+}

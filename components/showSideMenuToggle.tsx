@@ -14,7 +14,7 @@ const ShowSideMenuToggle = (props: ShowSideMenuToggleProps) => {
       className={`${showToggle ? 'z-10' : '-left-40 opacity-0'} show-side-menu-btn`}
       onClick={() => showSideMenu ? handleToggle(false) : handleToggle(true)}
     >
-      <span>Menu {showSideMenu ? '⇚' : '⇛'}</span>
+      <span className="text-4xl">{showSideMenu ? '⇚' : '⇛'}</span>
     </button>
   )
 }

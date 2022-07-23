@@ -11,20 +11,21 @@ type FullMapProps = {
 const FullMap = (props: FullMapProps) => {
   return (
     <Map 
-      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       {...props.viewState}
-      mapStyle={props.mapStyle}
-      pitch={10}
-      dragPan={true}
-      scrollZoom={true}
-      onMove={e => props.handleOnMove(e.viewState)}
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       style={{width: '100vw', height: '100vh', overflow: 'hidden'}}
+      onMove={e => props.handleOnMove(e.viewState)}
       attributionControl={false}
+      mapStyle={props.mapStyle}
+      scrollZoom={true}
+      dragPan={true}
+      pitch={10}
     >
       {props.children}
+      
       <GeolocateControl 
+        onGeolocate={(e) => console.log(`lat: ${e.coords.latitude}, lng: ${e.coords.longitude}`)}
         position='bottom-right' 
-        onGeolocate={(e) => console.log(`lat: ${e.coords.latitude}, lng: ${e.coords.longitude}`)} 
       />
     </Map>
   );
