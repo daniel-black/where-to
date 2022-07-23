@@ -1,5 +1,4 @@
-import { ChangeEventHandler } from "react";
-import { MapStyle, MapStyleKey } from "../constants";
+import { MapStyle } from "../constants";
 import MapStyleCheckbox from "./mapStyleCheckbox";
 
 export type SelectMapStyleProps = {
@@ -11,14 +10,14 @@ const SelectMapStyle = (props: SelectMapStyleProps) => {
 
 
   return (
-    <div>
+    <details>
+      <summary>Map Theme</summary>
+      
       <MapStyleCheckbox {...props} styleKey='Outdoors' />
-
       <MapStyleCheckbox {...props} styleKey='Dark' />
-
       <MapStyleCheckbox {...props} styleKey='Light' />
    
-    </div>
+    </details>
   )
 }
 
