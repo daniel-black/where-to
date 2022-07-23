@@ -5,15 +5,19 @@ type MapStyleCheckboxProps = SelectMapStyleProps & { styleKey: MapStyleKey }
 
 const MapStyleCheckbox = (props: MapStyleCheckboxProps) => (
   <div>
-    <input 
-      type="radio" 
-      name='theme' 
-      value={MapStyle[props.styleKey]} 
-      id='Outdoors-theme' 
-      checked={props.mapStyle === MapStyle[props.styleKey]} 
-      onChange={() => props.handleChange(MapStyle[props.styleKey])} 
-    />
-    <label htmlFor="outdoors-theme">{props.styleKey}</label>
+    <label 
+      className="flex space-x-2"
+      htmlFor={`${props.styleKey}-theme`}>
+      <input 
+        type="radio" 
+        name='theme' 
+        value={MapStyle[props.styleKey]} 
+        id={`${props.styleKey}-theme`} 
+        checked={props.mapStyle === MapStyle[props.styleKey]} 
+        onChange={() => props.handleChange(MapStyle[props.styleKey])} 
+      />
+      <span>{props.styleKey}</span>
+    </label>
   </div>
 );
 
