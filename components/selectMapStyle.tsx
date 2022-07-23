@@ -16,6 +16,11 @@ const SelectMapStyle = (props: SelectMapStyleProps) => {
       <MapStyleCheckbox {...props} styleKey='Outdoors' />
       <MapStyleCheckbox {...props} styleKey='Dark' />
       <MapStyleCheckbox {...props} styleKey='Light' />
+      <MapStyleCheckbox {...props} styleKey='Streets' />
+      <MapStyleCheckbox {...props} styleKey='Satellite' />
+      <MapStyleCheckbox {...props} styleKey='Satellite Streets' />
+      <MapStyleCheckbox {...props} styleKey='Navigation Day' />
+      <MapStyleCheckbox {...props} styleKey='Navigation Night' />
    
     </details>
   )

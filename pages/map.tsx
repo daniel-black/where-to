@@ -12,15 +12,12 @@ const MapPage = () => {
       zoom: 4
   });
 
-  const handleMapStyleChange = (style: MapStyle) => {
-    setMapStyle(style);
-  }
 
   return (
     <div className="relative">
       <div className="z-10 absolute left-0 top-0 p-3 bg-slate-700 opacity-90 h-full w-64">
         <h1 className="text-3xl font-bold">Where2</h1>
-        <SelectMapStyle mapStyle={mapStyle} handleChange={handleMapStyleChange} />
+        <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
       </div>
       <Map 
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
