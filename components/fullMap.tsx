@@ -1,11 +1,11 @@
-import { GeolocateControl, Map, ViewState } from "react-map-gl";
-import { MapStyle } from "../constants";
+import { GeolocateControl, Map } from "react-map-gl";
+import { MapStyle, Viewport } from "../constants";
 
 type FullMapProps = {
   mapStyle: MapStyle,
-  viewState: ViewState,
+  viewState: Viewport,
   children?: React.ReactNode,
-  handleOnMove: React.Dispatch<React.SetStateAction<ViewState>>,
+  handleOnMove: (newViewport: Viewport) => void,
 }
 
 const FullMap = (props: FullMapProps) => {
