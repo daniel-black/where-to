@@ -1,17 +1,22 @@
-import { Map, Marker, GeolocateControl, Popup } from "react-map-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { Popup } from "react-map-gl";
 import { useState } from "react";
 import { MapStyle } from "../constants";
 import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
+import FullScreenMap from "../components/FullScreenMap";
 
+// Check out FlowMapBlue
 const MapPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewState, setViewState] = useState({
-      longitude: -102,
-      latitude: 38.3,
-      zoom: 4
+    longitude: -102,
+    latitude: 38.3,
+    zoom: 4,
+    bearing: 0,
+    pitch: 10,
+    padding: { top: 0, bottom: 0, left: 0, right: 0 }
   });
 
 
@@ -22,17 +27,8 @@ const MapPage = () => {
         <MyPlacesMenu handleClick={(showPopup: boolean) => setShowPopup(showPopup)} />
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
       </div>
-      <Map 
-        mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-        {...viewState}
-        mapStyle={mapStyle}
-        pitch={10}
-        dragPan={true}
-        scrollZoom={true}
-        onMove={e => setViewState(e.viewState)}
-        style={{width: '100vw', height: '100vh', overflow: 'hidden'}}
-        attributionControl={false}
-      >
+
+      <FullScreenMap viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
         {showPopup && (
           <Popup maxWidth="1000px" className="opacity-80 rounded-sm" longitude={-100} latitude={40} anchor='center' onClose={() => setShowPopup(false)}>
             <div className="space-y-2 p-6 text-4xl">
@@ -42,9 +38,7 @@ const MapPage = () => {
             </div>
           </Popup>
         )}
-        <Marker longitude={-122.4} latitude={37.8} color='green' />
-        <GeolocateControl position='bottom-right' />
-      </Map>
+      </FullScreenMap>
     </div>
   );
 }
