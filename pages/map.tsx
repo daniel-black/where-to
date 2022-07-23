@@ -6,8 +6,7 @@ import SelectMapStyle from "../components/selectMapStyle";
 import MyPlacesMenu from "../components/myPlacesMenu";
 import ShowSideMenuToggle from '../components/showSideMenuToggle';
 import dynamic from 'next/dynamic';
-// import FullScreenMap from '../components/fullScreenMap';
-import X from '../components/x';
+import FullMap from '../components/fullMap';
 
 const MapPageWrapper = dynamic(
   () => import('../components/mapPageWrapper'), 
@@ -47,7 +46,8 @@ const MapPage = () => {
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
       </div>
       <ShowSideMenuToggle showToggle={isMobile} showSideMenu={showSideMenu} handleToggle={setShowSideMenu} />
-      {/* <FullScreenMap viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
+      
+      <FullMap viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
         {showPopup && (
           <Popup maxWidth="1000px" className="opacity-80 rounded-sm" longitude={-100} latitude={40} anchor='center' onClose={() => setShowPopup(false)}>
             <div className="space-y-2 p-6 text-4xl">
@@ -57,10 +57,7 @@ const MapPage = () => {
             </div>
           </Popup>
         )}
-      </FullScreenMap> */}
-      <X viewState={viewState} mapStyle={mapStyle} handleOnMove={setViewState}>
-
-      </X>
+      </FullMap>
       
     </MapPageWrapper>
   );

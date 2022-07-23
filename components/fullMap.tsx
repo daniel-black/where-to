@@ -1,14 +1,14 @@
 import { GeolocateControl, Map, ViewState } from "react-map-gl";
 import { MapStyle } from "../constants";
 
-type FullScreenMapProps = {
+type FullMapProps = {
   mapStyle: MapStyle,
   viewState: ViewState,
   children?: React.ReactNode,
   handleOnMove: React.Dispatch<React.SetStateAction<ViewState>>,
 }
 
-const FullScreenMap = (props: FullScreenMapProps) => {
+const FullMap = (props: FullMapProps) => {
   return (
     <Map 
       mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
@@ -30,4 +30,4 @@ const FullScreenMap = (props: FullScreenMapProps) => {
   );
 }
 
-export default FullScreenMap;
+export default FullMap;
