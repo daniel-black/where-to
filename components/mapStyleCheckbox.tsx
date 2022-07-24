@@ -7,9 +7,9 @@ type MapStyleCheckboxProps = SelectMapStyleProps & {
 }
 
 const MapStyleCheckbox = (props: MapStyleCheckboxProps): JSX.Element => (
-  <div>
+  <div className={`${props.mapStyle === MapStyle[props.styleKey] ? 'bg-zinc-800' : ''} flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 cursor-pointer`}>
     <label 
-      className="flex space-x-2"
+      className="flex space-x-2 w-full cursor-pointer"
       htmlFor={`${props.styleKey}-theme`}>
       <input 
         type="radio" 

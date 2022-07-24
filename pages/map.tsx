@@ -91,10 +91,12 @@ const MapPage = ():JSX.Element => {
             longitude={searchResult.geometry?.coordinates[0]}
             latitude={searchResult.geometry?.coordinates[1]}
             anchor='top'
+            offset={14}
             onClose={() => setShowPopup(false)}
+            closeButton={false}
           >
-            <div>
-              <h2 className="text-2xl">{searchResult.text}</h2>
+            <div className="rounded-lg bg-white absolute -top-3 -left-2 p-2 w-60 ring-4 ring-indigo-400 shadow-2xl">
+              <h2 className="text-2xl">📍 {searchResult.text}</h2>
               <button 
                 className="bg-indigo-500 p-2 text-xl text-center w-full rounded hover:bg-indigo-400"
                 onClick={() => saveLocation(searchResult)}  
