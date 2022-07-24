@@ -1,9 +1,12 @@
 import { MapStyle, MapStyleKey } from "../constants";
 import { SelectMapStyleProps } from "./selectMapStyle";
 
-type MapStyleCheckboxProps = SelectMapStyleProps & { styleKey: MapStyleKey }
+type MapStyleCheckboxProps = SelectMapStyleProps & { 
+  styleKey: MapStyleKey,
+  emoji: string,  
+}
 
-const MapStyleCheckbox = (props: MapStyleCheckboxProps) => (
+const MapStyleCheckbox = (props: MapStyleCheckboxProps): JSX.Element => (
   <div>
     <label 
       className="flex space-x-2"
@@ -15,11 +18,11 @@ const MapStyleCheckbox = (props: MapStyleCheckboxProps) => (
         id={`${props.styleKey}-theme`} 
         checked={props.mapStyle === MapStyle[props.styleKey]} 
         onChange={() => props.handleChange(MapStyle[props.styleKey])} 
+        className='opacity-0 h-0 w-0'
       />
-      <span>{props.styleKey}</span>
+      <span>{props.emoji} {props.styleKey}</span>
     </label>
   </div>
 );
-
 
 export default MapStyleCheckbox;
