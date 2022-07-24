@@ -1,22 +1,23 @@
 import { MapStyle } from "../constants";
 import MapStyleCheckbox from "./mapStyleCheckbox";
 
-export type SelectMapStyleProps = {
-  mapStyle: MapStyle,
-  handleChange: (style: MapStyle) => void
+export interface SelectMapStyleProps  {
+  mapStyle: MapStyle;
+  handleChange: (style: MapStyle) => void;
 }
 
-const SelectMapStyle = (props: SelectMapStyleProps) => (
+export const SelectMapStyle = (props: SelectMapStyleProps): JSX.Element => (
   <details>
-    <summary>Map Theme</summary>
-    <MapStyleCheckbox {...props} styleKey='Dark' />
-    <MapStyleCheckbox {...props} styleKey='Light' />
-    <MapStyleCheckbox {...props} styleKey='Streets' />
+    <summary className="list-none">🗺️ Map Theme</summary>
     <MapStyleCheckbox {...props} styleKey='Outdoors' />
     <MapStyleCheckbox {...props} styleKey='Satellite' />
-    <MapStyleCheckbox {...props} styleKey='Navigation Day' />
+    <MapStyleCheckbox {...props} styleKey='Streets' />
+    <MapStyleCheckbox {...props} styleKey='Light' />
+    <MapStyleCheckbox {...props} styleKey='Dark' />
+    
+    {/* <MapStyleCheckbox {...props} styleKey='Navigation Day' />
     <MapStyleCheckbox {...props} styleKey='Navigation Night' />
-    <MapStyleCheckbox {...props} styleKey='Satellite Streets' />
+    <MapStyleCheckbox {...props} styleKey='Satellite Streets' /> */}
   </details>
 );
 

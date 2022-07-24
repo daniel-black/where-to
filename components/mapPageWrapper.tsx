@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
-import useWindowSize from '../hooks/useWindowSize';
+// import useWindowSize from '../hooks/useWindowSize';
 
-type MapPageWrapperProps = { 
-  children: React.ReactNode,
-  handleChange: (width: number) => void
+interface Props { 
+  handleChange?: (width: number) => void;
+  children: React.ReactNode;
 };
 
-const MapPageWrapper = (props: MapPageWrapperProps) => {
-  const windowSize = useWindowSize();
+const MapPageWrapper = (props: Props): JSX.Element => {
+  // const windowSize = useWindowSize();
 
-  useEffect(() => {
-    props.handleChange(windowSize.width);
-  }, [windowSize]);
+  // useEffect(() => {
+  //   props?.handleChange(windowSize.width);
+  // }, [windowSize]);
 
   return (
-    <div className='relative'>
+    <div className="flex min-h-full">
       {props.children}
     </div>
   )

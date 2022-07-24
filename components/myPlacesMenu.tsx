@@ -7,14 +7,14 @@ type MyPlacesMenuProps = {
 const MyPlacesMenu = ({ handleClick }: MyPlacesMenuProps) => {
   return (
     <details>
-      <summary>Places I want to be</summary>
+      <summary>My Places</summary>
       <p>This is where my places will be</p>
-      <button
+      {/* <button
         onClick={() => handleClick(true)} 
-        className='bg-slate-800 text-white p-1 rounded'
+        className='bg-zinc-600 text-rose-100 p-1 rounded w-full'
       >
         Add a new place
-      </button>
+      </button> */}
     </details>
   )
 }

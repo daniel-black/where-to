@@ -2,9 +2,8 @@
 
 import * as React from 'react';
 import {useState} from 'react';
-import {useControl, Marker, MarkerProps, ControlPosition} from 'react-map-gl';
+import {useControl, Marker, MarkerProps, ControlPosition, Popup } from 'react-map-gl';
 import MapboxGeocoder, {GeocoderOptions} from '@mapbox/mapbox-gl-geocoder';
-import GeocodingResult from './geocodingResult';
 
 type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | 'marker'> & {
   mapboxAccessToken: string | undefined;
@@ -22,30 +21,38 @@ type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | '
 export default function GeocoderControl(props: GeocoderControlProps) {
   const [marker, setMarker] = useState(null);
 
+  // https://github.com/mapbox/mapbox-gl-geocoder/blob/main/API.md#mapboxgeocoder
   const geocoder = useControl<MapboxGeocoder>(() => {
     const ctrl = new MapboxGeocoder({
       ...props,
       marker: false,
-      accessToken: props.mapboxAccessToken
+      accessToken: props.mapboxAccessToken,
+      countries: 'us',
+      placeholder: 'Find your new home :)',
+      collapsed: true,
+      clearAndBlurOnEsc: true,
+      limit: 4,
+      types: 'place,locality,neighborhood',
     });
 
+    
     ctrl.on('loading', props.onLoading);
     ctrl.on('results', props.onResults);
-
     ctrl.on('result', (evt) => {
       props.onResult(evt);
 
       const { result } = evt;
-      console.log(result);
-      
       const location = result && (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
 
       if (location && props.marker) {
         setMarker(
-          <Marker {...props.marker} longitude={location[0]} latitude={location[1]} draggable={false}>
-            <GeocodingResult {...result} />
-            {/* <div className='bg-white p-4'>{location[0]}, {location[1]}</div> */}
-          </Marker>
+          <Marker 
+            {...props.marker}
+            longitude={location[0]} 
+            latitude={location[1]} 
+            draggable={false} 
+            color={'#ff0000'}
+          />
         );
       } else {
         setMarker(null);
@@ -58,6 +65,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     },
     { position: props.position }
   );
+
 
   // @ts-ignore (TS2339) private member
   if (geocoder._map) {
@@ -111,6 +119,8 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     //   geocoder.setWorldview(props.worldview);
     // }
   }
+  
+
   return marker;
 }
 

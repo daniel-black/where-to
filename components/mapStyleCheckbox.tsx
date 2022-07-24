@@ -3,7 +3,7 @@ import { SelectMapStyleProps } from "./selectMapStyle";
 
 type MapStyleCheckboxProps = SelectMapStyleProps & { styleKey: MapStyleKey }
 
-const MapStyleCheckbox = (props: MapStyleCheckboxProps) => (
+const MapStyleCheckbox = (props: MapStyleCheckboxProps): JSX.Element => (
   <div>
     <label 
       className="flex space-x-2"
@@ -20,6 +20,5 @@ const MapStyleCheckbox = (props: MapStyleCheckboxProps) => (
     </label>
   </div>
 );
-
 
 export default MapStyleCheckbox;

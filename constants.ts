@@ -18,9 +18,9 @@ export interface Viewport {
 };
 
 export const initialViewport: Viewport = {
-  longitude: -102,
-  latitude: 38.3,
-  zoom: 4,
+  longitude: -98.57,
+  latitude: 39.828,
+  zoom: 3.75,
 };
 
 export interface Place {
