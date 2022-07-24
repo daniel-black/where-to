@@ -1,5 +1,5 @@
 import { initialViewport, MapStyle, Place } from "../constants";
-import { Map, Popup, GeolocateControl } from "react-map-gl";
+import { Map, Popup, GeolocateControl, Marker } from "react-map-gl";
 import React, { useEffect, useState } from "react";
 
 import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
@@ -19,14 +19,16 @@ const MapPage = ():JSX.Element => {
 
   useEffect(() => {
     if (searchResult !== null) {
-      setPlaces(places => [...places, searchResult]);
       setShowPopup(true);
     }
   }, [searchResult])
 
-  console.log(places);
 
    
+  const saveLocation = (place: Place): void => {
+    setPlaces(places => [...places, place]);
+    setShowPopup(false);
+  }
 
   return (
     <div className="flex  min-h-full">
@@ -65,7 +67,15 @@ const MapPage = ():JSX.Element => {
         dragPan={true}
         pitch={10}
       >
-        
+        {places.map((place, index) => (
+          <Marker
+            key={index}
+            longitude={place.geometry?.coordinates[0]} 
+            latitude={place.geometry?.coordinates[1]}
+            anchor='top'
+
+          ></Marker>
+        ))}
         <GeocoderControl 
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
           position='top-right'
@@ -76,18 +86,25 @@ const MapPage = ():JSX.Element => {
           // onResults={(e) => console.dir(e)}
         />
 
-        {showPopup && searchResult && (
+        {showPopup && searchResult && searchResult.geometry?.coordinates.length === 2 && (
           <Popup 
             longitude={searchResult.geometry?.coordinates[0]}
             latitude={searchResult.geometry?.coordinates[1]}
             anchor='top'
+            onClose={() => setShowPopup(false)}
           >
-            {searchResult.text}
+            <div>
+              <h2 className="text-2xl">{searchResult.text}</h2>
+              <button 
+                className="bg-indigo-500 p-2 text-xl text-center w-full rounded hover:bg-indigo-400"
+                onClick={() => saveLocation(searchResult)}  
+              >Save Location</button>
+            </div>
           </Popup>
         )}
 
         <UserLocationMarker />
-        <GeolocateControl onGeolocate={(e) => console.log(`lat: ${e.coords.latitude}, lng: ${e.coords.longitude}`)} position='bottom-right' />
+        <GeolocateControl position='bottom-right' />
       </Map>
     
     </div>
