@@ -4,6 +4,9 @@ import * as React from 'react';
 import {useState} from 'react';
 import {useControl, Marker, MarkerProps, ControlPosition, Popup } from 'react-map-gl';
 import MapboxGeocoder, {GeocoderOptions} from '@mapbox/mapbox-gl-geocoder';
+import { Place } from '../constants';
+
+type Event = { result: Place};
 
 type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | 'marker'> & {
   mapboxAccessToken: string | undefined;
@@ -13,7 +16,7 @@ type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | '
 
   onLoading?: (e: object) => void;
   onResults?: (e: object) => void;
-  onResult?: (e: object) => void;
+  onResult?: (e: Event) => void;
   onError?: (e: object) => void;
 };
 
@@ -40,7 +43,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     ctrl.on('results', props.onResults);
     ctrl.on('result', (evt) => {
       props.onResult(evt);
-
+      console.log(typeof evt)
       const { result } = evt;
       const location = result && (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
 
@@ -51,7 +54,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
             longitude={location[0]} 
             latitude={location[1]} 
             draggable={false} 
-            color={'#ff0000'}
+            color={'#ef4444'}
           />
         );
       } else {
