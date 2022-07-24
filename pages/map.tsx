@@ -27,9 +27,9 @@ const MapPage = ():JSX.Element => {
    
 
   return (
-    <div className="flex min-h-full">
+    <div className="flex  min-h-full">
       {/* Side menu hides by default when on mobile */}
-      <div className='side-menu'>
+      <div className='side-menu '>
         <h1 className="text-3xl font-bold text-center">Where to?</h1>
         <details>
           <summary className="list-none flex justify-between items-center p-2 hover:cursor-pointer rounded-b-xl duration-100 ease-in-out hover:bg-zinc-800">
@@ -37,7 +37,7 @@ const MapPage = ():JSX.Element => {
           </summary>
           <div className="ml-7">
             {places.length > 0 ? (places.map((p, index) => (
-            <div key={index} className='flex items-center justify-between my-1 p-1 rounded hover:bg-zinc-800 group'>
+            <div key={index} className='flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 group'>
               <span>{index+1}. {p.place_name.replace(', United States', '')}</span>
               <button
                 onClick={() => setPlaces(places.filter(p => places.indexOf(p) !== index))} 
@@ -46,7 +46,7 @@ const MapPage = ():JSX.Element => {
               </button>
             </div>
             ))) : 
-            <p className="text-xs text-zinc-400">No saved places yet! 🙀</p>}
+            <p className="text-xs text-zinc-400 mt-1">No saved places yet! 🙀</p>}
           </div>
         </details>
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
