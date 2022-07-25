@@ -2,7 +2,7 @@ import { initialViewport, MapStyle, Place } from "../constants";
 import { Map, Popup, GeolocateControl, Marker, NavigationControl, useControl, LngLat } from "react-map-gl";
 import React, { useEffect, useState } from "react";
 import {MapboxOverlay, MapboxOverlayProps} from '@deck.gl/mapbox/typed';
-import {ArcLayer, ScatterplotLayer} from '@deck.gl/layers/typed';
+import {ArcLayer, ArcLayerProps } from '@deck.gl/layers/typed';
 
 import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -28,8 +28,6 @@ const MapPage = ():JSX.Element => {
   const [showPopup, setShowPopup] = useState(false);
   const [places, setPlaces] = useState<Place[]>([]);
 
-  console.log(homeLocation)
-
   useEffect(() => {
     if (searchResult !== null) {
       setShowPopup(true);
@@ -41,32 +39,55 @@ const MapPage = ():JSX.Element => {
     setShowPopup(false);
   }
 
-  const data = [
-    {
-      inbound: 72633,
-      outbound: 74735,
-      from: {
-        name: '19th St. Oakland (19TH)',
-        coordinates: [-122.269029, 37.80787]
-      },
-      to: {
-        name: '12th St. Oakland City Center (12TH)',
-        coordinates: [-100.271604, 37.803664]
+  const data = homeLocation ? (places.map(p => ({
+    from: {
+      name: 'Home',
+      coordinates: [homeLocation?.lng, homeLocation?.lat]
+    },
+    to: {
+      name: p.text,
+      coordinates: p.geometry?.coordinates
     }
-  }
-];
-
-  const arcLayer = new ArcLayer({
-    id: 'penguin',
+  }))) : [];
+  
+  const arcLayerProps: ArcLayerProps = {
+    id: 'arc-layer',
     data,
     widthUnits: 'meters',
     getWidth: 10000,
-    getHeight: 1,
+    getHeight: 0.5,
     getSourcePosition: d => d.from.coordinates,
     getTargetPosition: d => d.to.coordinates,
-    getSourceColor: d => [Math.sqrt(d.inbound), 140, 0],
-    getTargetColor: d => [Math.sqrt(d.outbound), 140, 0],
-  });
+  };
+
+  console.log(arcLayerProps)
+
+  const arcLayer = new ArcLayer(arcLayerProps);
+
+//   const data = [
+//     {
+//       inbound: 72633,
+//       outbound: 74735,
+//       from: {
+//         name: '19th St. Oakland (19TH)',
+//         coordinates: [-122.269029, 37.80787]
+//       },
+//       to: {
+//         name: '12th St. Oakland City Center (12TH)',
+//         coordinates: [-100.271604, 37.803664]
+//     }
+//   }
+// ];
+
+//   const arcLayer = new ArcLayer({
+//     id: 'arcs',
+//     data,
+    // widthUnits: 'meters',
+    // getWidth: 10000,
+    // getHeight: 1,
+    // getSourcePosition: d => d.from.coordinates,
+    // getTargetPosition: d => d.to.coordinates,
+//   });
 
 
   return (
