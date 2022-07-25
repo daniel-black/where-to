@@ -97,6 +97,10 @@ const MapPage = ():JSX.Element => {
                     <div className="flex space-x-2 items-center">
                       <span className="font-mono flex items-center justify-center h-6 w-6 bg-emerald-600 text-zinc-900 rounded-full">{up.interestLevel}</span> 
                       <span>{up.place_name.split(',')[0]}</span>
+                      <button 
+                        className="duration-100 hover:animate-spin ease-in-out" 
+                        onClick={() => setViewport({longitude: up.geometry!.coordinates[0], latitude: up.geometry!.coordinates[1], zoom: 6})}
+                      >🧭</button>
                     </div>
                     <button
                       onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
