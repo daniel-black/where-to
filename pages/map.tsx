@@ -26,6 +26,7 @@ interface UserPlace extends Place {
 
 // Check out FlowMapBlue
 const MapPage = ():JSX.Element => {
+  const [pitch, setPitch] = useState(30);
   const [homeLocation, setHomeLocation] = useState<LngLat | null>(null);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewport, setViewport] = useState(initialViewport);
@@ -148,6 +149,11 @@ const MapPage = ():JSX.Element => {
           </div>
         </details>
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
+        {/* Control map pitch */}
+        <div>
+          <div className="">Pitch</div>
+          <input type="range" className="-rotate-90 h-72" min={0} max={60} value={pitch} onChange={(e) => setPitch(e.currentTarget.value)} />
+        </div>
       </div>
       
       <Map 
@@ -159,7 +165,7 @@ const MapPage = ():JSX.Element => {
         mapStyle={mapStyle}
         scrollZoom={true}
         dragPan={true}
-        pitch={40}
+        pitch={pitch}
         antialias={true}
       >
         {userPlaces.map((up, index) => (
