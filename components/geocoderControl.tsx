@@ -14,6 +14,8 @@ type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | '
 
   position: ControlPosition;
 
+  showPopup: (show: boolean) => void;
+
   onLoading?: (e: object) => void;
   onResults?: (e: object) => void;
   onResult?: (e: Event) => void;
@@ -57,6 +59,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
             latitude={location[1]} 
             draggable={false} 
             color={'#ef4444'}
+            onClick={() => props.showPopup(true)}
           />
         );
       } else {

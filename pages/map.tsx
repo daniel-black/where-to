@@ -150,9 +150,8 @@ const MapPage = ():JSX.Element => {
         </details>
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
         {/* Control map pitch */}
-        <div>
-          <div className="">Pitch</div>
-          <input type="range" className="-rotate-90 h-72" min={0} max={60} value={pitch} onChange={(e) => setPitch(e.currentTarget.value)} />
+        <div className="flex justify-end">
+          <input type="range" className="-rotate-90 mt-28 h-1 w-28" min={0} max={60} value={pitch} onChange={(e) => setPitch(+e.currentTarget.value)} />
         </div>
       </div>
       
@@ -188,6 +187,7 @@ const MapPage = ():JSX.Element => {
           // onLoading={(e) => console.dir(e)}
           onError={(e) => console.log('erroring')}
           // onResults={(e) => console.dir(e)}
+          showPopup={(show: boolean) => setShowPopup(show)}
         />
 
         {showPopup && searchResult && searchResult.geometry?.coordinates.length === 2 && (
@@ -198,9 +198,13 @@ const MapPage = ():JSX.Element => {
             offset={14}
             onClose={() => setShowPopup(false)}
             closeButton={false}
+            closeOnClick={false}
           >
             <div className="rounded-lg bg-white absolute -top-3 -left-2 p-2 w-72 ring-4 ring-indigo-400 shadow-2xl space-y-3">
-              <h2 className="text-2xl">📍 {searchResult.text}</h2>
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl">📍 {searchResult.text}</h2>
+                <button className="outline-none bg-zinc-300 text-zinc-500 h-7 w-7 rounded-full hover:shadow" onClick={() => setShowPopup(false)}>X</button>
+              </div>
               <div className="h-1 w-full bg-indigo-400 rounded-full" />
               <div className="flex items-center text-lg space-x-2">
                 <span>Rate your interest in {searchResult.text}:</span> 
