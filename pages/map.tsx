@@ -39,7 +39,7 @@ const MapPage = ():JSX.Element => {
     setShowPopup(false);
   }
 
-  const data = homeLocation ? (places.map(p => ({
+  const arcData = homeLocation ? (places.map(p => ({
     from: {
       name: 'Home',
       coordinates: [homeLocation?.lng, homeLocation?.lat]
@@ -52,10 +52,10 @@ const MapPage = ():JSX.Element => {
   
   const arcLayerProps: ArcLayerProps = {
     id: 'arc-layer',
-    data,
+    data: arcData,
     widthUnits: 'meters',
     getWidth: 10000,
-    getHeight: 0.5,
+    getHeight: 0.8,
     getSourcePosition: d => d.from.coordinates,
     getTargetPosition: d => d.to.coordinates,
   };
@@ -64,30 +64,6 @@ const MapPage = ():JSX.Element => {
 
   const arcLayer = new ArcLayer(arcLayerProps);
 
-//   const data = [
-//     {
-//       inbound: 72633,
-//       outbound: 74735,
-//       from: {
-//         name: '19th St. Oakland (19TH)',
-//         coordinates: [-122.269029, 37.80787]
-//       },
-//       to: {
-//         name: '12th St. Oakland City Center (12TH)',
-//         coordinates: [-100.271604, 37.803664]
-//     }
-//   }
-// ];
-
-//   const arcLayer = new ArcLayer({
-//     id: 'arcs',
-//     data,
-    // widthUnits: 'meters',
-    // getWidth: 10000,
-    // getHeight: 1,
-    // getSourcePosition: d => d.from.coordinates,
-    // getTargetPosition: d => d.to.coordinates,
-//   });
 
 
   return (
@@ -125,7 +101,7 @@ const MapPage = ():JSX.Element => {
         mapStyle={mapStyle}
         scrollZoom={true}
         dragPan={true}
-        pitch={30}
+        pitch={40}
         antialias={true}
       >
         {places.map((place, index) => (
