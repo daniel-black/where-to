@@ -80,17 +80,17 @@ const MapPage = ():JSX.Element => {
   const arcLayer = new ArcLayer(arcLayerProps);
 
   const colorScale = [
-    'bg-zinc-700',
-    'bg-sky-900',
-    'bg-sky-800',
-    'bg-sky-700',
-    'bg-sky-600',
-    'bg-sky-500',
-    'bg-sky-400',
-    'bg-sky-300',
-    'bg-sky-200',
-    'bg-sky-100',
-    'bg-sky-50',
+    'bg-green-500/20',
+    'bg-green-500/[24%]',
+    'bg-green-500/[28%]',
+    'bg-green-500/[37%]',
+    'bg-green-500/[46%]',
+    'bg-green-500/[55%]',
+    'bg-green-500/[64%]',
+    'bg-green-500/[73%]',
+    'bg-green-500/[82%]',
+    'bg-green-500/[91%]',
+    'bg-green-500',
   ];
 
   return (
