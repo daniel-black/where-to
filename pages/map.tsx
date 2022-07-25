@@ -76,9 +76,21 @@ const MapPage = ():JSX.Element => {
     getTargetColor: d => [0, getVal(d.interestLevel)* 0.5, getVal(d.interestLevel)],
   };
 
-  console.log(userPlaces);
   const arcLayer = new ArcLayer(arcLayerProps);
 
+  const colorScale = [
+    'bg-zinc-700',
+    'bg-sky-900',
+    'bg-sky-800',
+    'bg-sky-700',
+    'bg-sky-600',
+    'bg-sky-500',
+    'bg-sky-400',
+    'bg-sky-300',
+    'bg-sky-200',
+    'bg-sky-100',
+    'bg-sky-50',
+  ];
 
   return (
     <div className="flex  min-h-full">
@@ -95,12 +107,12 @@ const MapPage = ():JSX.Element => {
                 <summary className="list-none">
                   <div className='flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 group'>
                     <div className="flex space-x-2 items-center">
-                      <span className="font-mono flex items-center justify-center h-6 w-6 bg-emerald-600 text-zinc-900 rounded-full">{up.interestLevel}</span> 
+                      <span className={`font-mono flex items-center justify-center h-6 w-6 ${colorScale[up.interestLevel]} text-zinc-900 rounded-full`}>{up.interestLevel}</span> 
                       <span>{up.place_name.split(',')[0]}</span>
                       <button 
-                        className="duration-100 hover:animate-spin ease-in-out" 
+                        className="hidden group-hover:block text-rose-300 ml-4" 
                         onClick={() => setViewport({longitude: up.geometry!.coordinates[0], latitude: up.geometry!.coordinates[1], zoom: 6})}
-                      >🧭</button>
+                      >Snap To</button>
                     </div>
                     <button
                       onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
@@ -122,8 +134,8 @@ const MapPage = ():JSX.Element => {
                     onClick={() => {
                       if (currentNote[0] === up) {
                         const updatedUserPlaces = userPlaces.filter(p => p !== up).concat({...up, notes: currentNote[1]});
-                        console.log(updatedUserPlaces);
-                        // setUserPlaces(userPlaces => [...userPlaces, {...up, notes: currentNote[1]}])
+                        // console.log(updatedUserPlaces);
+                        setUserPlaces(updatedUserPlaces);
                       }
                       //setUserPlaces(userPlaces => [...userPlaces, {...up, note: currentNote[0] currentNote[1]}])
                     }
