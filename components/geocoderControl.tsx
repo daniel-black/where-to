@@ -34,7 +34,6 @@ export default function GeocoderControl(props: GeocoderControlProps) {
       placeholder: 'Find your new home :)',
       collapsed: true,
       clearAndBlurOnEsc: true,
-      limit: 4,
       types: 'place,locality,neighborhood',
     });
 
@@ -43,8 +42,11 @@ export default function GeocoderControl(props: GeocoderControlProps) {
     ctrl.on('results', props.onResults);
     ctrl.on('result', (evt) => {
       props.onResult(evt);
-      console.log(typeof evt)
+
       const { result } = evt;
+
+      console.log(result);
+      
       const location = result && (result.center || (result.geometry?.type === 'Point' && result.geometry.coordinates));
       console.log(result)
       if (location && props.marker) {

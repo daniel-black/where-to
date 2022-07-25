@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@danmarshall/deckgl-typings": "^4.9.24",
     "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "deck.gl": "^8.8.4",
     "mapbox-gl": "^2.9.2",

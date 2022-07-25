@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Marker } from 'react-map-gl'
+import React, { useEffect } from 'react'
+import { LngLat, Marker } from 'react-map-gl'
 
-const UserLocationMarker = () => {
-  const [userLocation, setUserLocation] = useState({
-    latitude: -1, 
-    longitude: -1
-  });
+interface Props {
+  homeLocation: LngLat | null;
+  setHomeLocation: (location: LngLat) => void;
+};
+
+const UserLocationMarker = ({homeLocation, setHomeLocation}: Props) => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
       if (typeof latitude === 'number' && typeof longitude === 'number') 
-        setUserLocation({ longitude, latitude });
+        setHomeLocation({ lng: longitude, lat: latitude } as LngLat);
     })
   }, []);
 
   return (
     <>
-      {userLocation.latitude === -1 && userLocation.longitude === -1 ? 
-        null : 
-        (
-          <Marker {...userLocation}>
-            <span className='text-3xl bg-transparent drop-shadow-xl'>🏠</span>
-          </Marker>
-        )
-      }
+      {homeLocation && (
+        <Marker latitude={homeLocation.lat} longitude={homeLocation.lng}>
+          <span className='text-3xl bg-transparent drop-shadow-xl'>🏠</span>
+        </Marker>
+      )}
     </>
   );
 }

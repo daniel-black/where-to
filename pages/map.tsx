@@ -1,6 +1,8 @@
 import { initialViewport, MapStyle, Place } from "../constants";
-import { Map, Popup, GeolocateControl, Marker } from "react-map-gl";
+import { Map, Popup, GeolocateControl, Marker, NavigationControl, useControl, LngLat } from "react-map-gl";
 import React, { useEffect, useState } from "react";
+import {MapboxOverlay, MapboxOverlayProps} from '@deck.gl/mapbox/typed';
+import {ArcLayer, ScatterplotLayer} from '@deck.gl/layers/typed';
 
 import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -9,26 +11,63 @@ import UserLocationMarker from '../components/userLocationMarker';
 import GeocoderControl from '../components/geocoderControl';
 import SelectMapStyle from "../components/selectMapStyle";
 
+
+function DeckGLOverlay(props: MapboxOverlayProps) {
+  const overlay = useControl<MapboxOverlay>(() => new MapboxOverlay(props));
+  overlay.setProps(props);
+  return null;
+}
+
+
 // Check out FlowMapBlue
 const MapPage = ():JSX.Element => {
+  const [homeLocation, setHomeLocation] = useState<LngLat | null>(null);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewport, setViewport] = useState(initialViewport);
   const [searchResult, setSearchResult] = useState<Place | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [places, setPlaces] = useState<Place[]>([]);
 
+  console.log(homeLocation)
+
   useEffect(() => {
     if (searchResult !== null) {
       setShowPopup(true);
     }
   }, [searchResult])
-
-
    
   const saveLocation = (place: Place): void => {
     setPlaces(places => [...places, place]);
     setShowPopup(false);
   }
+
+  const data = [
+    {
+      inbound: 72633,
+      outbound: 74735,
+      from: {
+        name: '19th St. Oakland (19TH)',
+        coordinates: [-122.269029, 37.80787]
+      },
+      to: {
+        name: '12th St. Oakland City Center (12TH)',
+        coordinates: [-100.271604, 37.803664]
+    }
+  }
+];
+
+  const arcLayer = new ArcLayer({
+    id: 'penguin',
+    data,
+    widthUnits: 'meters',
+    getWidth: 10000,
+    getHeight: 1,
+    getSourcePosition: d => d.from.coordinates,
+    getTargetPosition: d => d.to.coordinates,
+    getSourceColor: d => [Math.sqrt(d.inbound), 140, 0],
+    getTargetColor: d => [Math.sqrt(d.outbound), 140, 0],
+  });
+
 
   return (
     <div className="flex  min-h-full">
@@ -65,7 +104,8 @@ const MapPage = ():JSX.Element => {
         mapStyle={mapStyle}
         scrollZoom={true}
         dragPan={true}
-        pitch={10}
+        pitch={30}
+        antialias={true}
       >
         {places.map((place, index) => (
           <Marker
@@ -76,6 +116,9 @@ const MapPage = ():JSX.Element => {
 
           ></Marker>
         ))}
+        
+        <DeckGLOverlay layers={[arcLayer]} />
+        
         <GeocoderControl 
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
           position='top-right'
@@ -104,8 +147,9 @@ const MapPage = ():JSX.Element => {
             </div>
           </Popup>
         )}
-
-        <UserLocationMarker />
+       
+        <UserLocationMarker homeLocation={homeLocation} setHomeLocation={(l: LngLat) => setHomeLocation(l)} />
+        <NavigationControl position="bottom-right" />
         <GeolocateControl position='bottom-right' />
       </Map>
     
