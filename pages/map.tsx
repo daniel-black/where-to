@@ -111,9 +111,11 @@ const MapPage = ():JSX.Element => {
                       <span className={`font-mono flex items-center justify-center h-6 w-6 ${colorScale[up.interestLevel]} text-zinc-900 rounded-full`}>{up.interestLevel}</span> 
                       <span>{up.place_name.split(',')[0]}</span>
                       <button 
-                        className="hidden group-hover:block text-rose-300 ml-4" 
-                        onClick={() => setViewport({longitude: up.geometry!.coordinates[0], latitude: up.geometry!.coordinates[1], zoom: 6})}
-                      >Snap To</button>
+                        className="hidden group-hover:flex justify-center items-center bg-zinc-700 rounded-full h-6 w-6 hover:shadow-sm" 
+                        onClick={() => setViewport({longitude: up.geometry!.coordinates[0], latitude: up.geometry!.coordinates[1], zoom: 7})}
+                      >
+                        <svg className="fill-rose-300" width='29' height='29' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg' fill='#333'> <path d='M10 4C9 4 9 5 9 5v.1A5 5 0 0 0 5.1 9H5s-1 0-1 1 1 1 1 1h.1A5 5 0 0 0 9 14.9v.1s0 1 1 1 1-1 1-1v-.1a5 5 0 0 0 3.9-3.9h.1s1 0 1-1-1-1-1-1h-.1A5 5 0 0 0 11 5.1V5s0-1-1-1zm0 2.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 1 1 0-7z'/> <circle id='dot' cx='10' cy='10' r='2'/> <path id='stroke' d='M14 5l1 1-9 9-1-1 9-9z' display='none'/> </svg>
+                      </button>
                     </div>
                     <button
                       onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
