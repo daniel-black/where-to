@@ -45,7 +45,6 @@ const MapPage = ():JSX.Element => {
     setShowPopup(false);
   }
 
-  console.log(userPlaces);
 
   const getVal = (n: number): number => ((n / 10) * 255); 
 
@@ -88,9 +87,9 @@ const MapPage = ():JSX.Element => {
             <span>📌 My Places</span><span className="flex justify-center items-center font-mono h-6 w-6 rounded-full bg-rose-500 text-zinc-900 hover:bg-rose-400 duration-100">{userPlaces.length}</span>
           </summary>
           <div className="ml-7">
-            {userPlaces.length > 0 ? (userPlaces.map((up, index) => (
+            {userPlaces.length > 0 ? (userPlaces.sort((a, b) => b.interestLevel - a.interestLevel).map((up, index) => (
             <div key={index} className='flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 group'>
-              <span>{index+1}. {up.place_name.replace(', United States', '')}</span>
+              <span>{up.place_name.replace(', United States', '')}</span>
               <button
                 onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
                 className="mr-0.5 flex items-center justify-center font-extrabold w-5 h-4 rounded bg-zinc-800 group-hover:brightness-125 group-hover:shadow hover:bg-rose-900 duration-100 ease-in-out">
