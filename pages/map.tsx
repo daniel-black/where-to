@@ -18,6 +18,10 @@ function DeckGLOverlay(props: MapboxOverlayProps) {
   return null;
 }
 
+interface UserPlace extends Place {
+  interestLevel: number;
+};
+
 
 // Check out FlowMapBlue
 const MapPage = ():JSX.Element => {
@@ -25,42 +29,50 @@ const MapPage = ():JSX.Element => {
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewport, setViewport] = useState(initialViewport);
   const [searchResult, setSearchResult] = useState<Place | null>(null);
+  const [interestLevel, setInterestLevel] = useState(5);
   const [showPopup, setShowPopup] = useState(false);
-  const [places, setPlaces] = useState<Place[]>([]);
+  const [userPlaces, setUserPlaces] = useState<UserPlace[]>([]);
 
   useEffect(() => {
+    setInterestLevel(5)
     if (searchResult !== null) {
       setShowPopup(true);
     }
   }, [searchResult])
    
   const saveLocation = (place: Place): void => {
-    setPlaces(places => [...places, place]);
+    setUserPlaces(userPlaces => [...userPlaces, {...place, interestLevel}]);
     setShowPopup(false);
   }
 
-  const arcData = homeLocation ? (places.map(p => ({
+  console.log(userPlaces);
+
+  const getVal = (n: number): number => ((n / 10) * 255); 
+
+  const arcData = homeLocation ? (userPlaces.map(up => ({
+    interestLevel,
     from: {
       name: 'Home',
       coordinates: [homeLocation?.lng, homeLocation?.lat]
     },
     to: {
-      name: p.text,
-      coordinates: p.geometry?.coordinates
+      name: up.text,
+      coordinates: up.geometry?.coordinates
     }
   }))) : [];
   
   const arcLayerProps: ArcLayerProps = {
     id: 'arc-layer',
     data: arcData,
-    widthUnits: 'meters',
-    getWidth: 10000,
+    widthUnits: 'pixels',
+    getWidth: 4,
     getHeight: 0.8,
     getSourcePosition: d => d.from.coordinates,
     getTargetPosition: d => d.to.coordinates,
+    getSourceColor: d => [255, 70, 0, 125],
+    getTargetColor: d => [0, getVal(d.interestLevel)* 0.5, getVal(d.interestLevel)],
   };
 
-  console.log(arcLayerProps)
 
   const arcLayer = new ArcLayer(arcLayerProps);
 
@@ -73,14 +85,14 @@ const MapPage = ():JSX.Element => {
         <h1 className="text-3xl font-bold text-center">Where to?</h1>
         <details>
           <summary className="list-none flex justify-between items-center p-2 hover:cursor-pointer rounded-b-xl duration-100 ease-in-out hover:bg-zinc-800">
-            <span>📌 My Places</span><span className="flex justify-center items-center font-mono h-6 w-6 rounded-full bg-rose-500 text-zinc-900 hover:bg-rose-400 duration-100">{places.length}</span>
+            <span>📌 My Places</span><span className="flex justify-center items-center font-mono h-6 w-6 rounded-full bg-rose-500 text-zinc-900 hover:bg-rose-400 duration-100">{userPlaces.length}</span>
           </summary>
           <div className="ml-7">
-            {places.length > 0 ? (places.map((p, index) => (
+            {userPlaces.length > 0 ? (userPlaces.map((up, index) => (
             <div key={index} className='flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 group'>
-              <span>{index+1}. {p.place_name.replace(', United States', '')}</span>
+              <span>{index+1}. {up.place_name.replace(', United States', '')}</span>
               <button
-                onClick={() => setPlaces(places.filter(p => places.indexOf(p) !== index))} 
+                onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
                 className="mr-0.5 flex items-center justify-center font-extrabold w-5 h-4 rounded bg-zinc-800 group-hover:brightness-125 group-hover:shadow hover:bg-rose-900 duration-100 ease-in-out">
                 <span className="h-[2px] w-[12px] rounded-full bg-zinc-900"></span>
               </button>
@@ -104,11 +116,11 @@ const MapPage = ():JSX.Element => {
         pitch={40}
         antialias={true}
       >
-        {places.map((place, index) => (
+        {userPlaces.map((up, index) => (
           <Marker
             key={index}
-            longitude={place.geometry?.coordinates[0]} 
-            latitude={place.geometry?.coordinates[1]}
+            longitude={up.geometry?.coordinates[0]} 
+            latitude={up.geometry?.coordinates[1]}
             anchor='top'
 
           ></Marker>
@@ -135,8 +147,24 @@ const MapPage = ():JSX.Element => {
             onClose={() => setShowPopup(false)}
             closeButton={false}
           >
-            <div className="rounded-lg bg-white absolute -top-3 -left-2 p-2 w-60 ring-4 ring-indigo-400 shadow-2xl">
+            <div className="rounded-lg bg-white absolute -top-3 -left-2 p-2 w-72 ring-4 ring-indigo-400 shadow-2xl space-y-3">
               <h2 className="text-2xl">📍 {searchResult.text}</h2>
+              <div className="h-1 w-full bg-indigo-400 rounded-full" />
+              <div className="flex items-center text-lg space-x-2">
+                <span>Rate your interest in {searchResult.text}:</span> 
+                <span className="flex justify-center items-center bg-indigo-200 h-7 w-7 rounded-lg text-indigo-500">{interestLevel}</span>
+              </div>
+              
+              <div className="w-full flex justify-between space-x-1">
+                <span className="font-mono">0</span>
+                <input 
+                  type="range" 
+                  min={0} max={10} value={interestLevel} 
+                  onChange={(e) => setInterestLevel(+e.currentTarget.value)} 
+                  className="w-full"
+                />
+                <span className="font-mono">10</span>
+              </div>
               <button 
                 className="bg-indigo-500 p-2 text-xl text-center w-full rounded hover:bg-indigo-400"
                 onClick={() => saveLocation(searchResult)}  
