@@ -20,6 +20,7 @@ function DeckGLOverlay(props: MapboxOverlayProps) {
 
 interface UserPlace extends Place {
   interestLevel: number;
+  notes?: string
 };
 
 
@@ -32,6 +33,8 @@ const MapPage = ():JSX.Element => {
   const [interestLevel, setInterestLevel] = useState(5);
   const [showPopup, setShowPopup] = useState(false);
   const [userPlaces, setUserPlaces] = useState<UserPlace[]>([]);
+  const [currentNote, setCurrentNote] = useState<[UserPlace | null, string]>([null, '']);
+  
 
   useEffect(() => {
     setInterestLevel(5)
@@ -66,15 +69,15 @@ const MapPage = ():JSX.Element => {
     widthUnits: 'pixels',
     getWidth: 4,
     getHeight: 0.8,
+    getTilt: -10,
     getSourcePosition: d => d.from.coordinates,
     getTargetPosition: d => d.to.coordinates,
     getSourceColor: d => [255, 70, 0, 125],
     getTargetColor: d => [0, getVal(d.interestLevel)* 0.5, getVal(d.interestLevel)],
   };
 
-
+  console.log(userPlaces);
   const arcLayer = new ArcLayer(arcLayerProps);
-
 
 
   return (
@@ -88,14 +91,42 @@ const MapPage = ():JSX.Element => {
           </summary>
           <div className="ml-7">
             {userPlaces.length > 0 ? (userPlaces.sort((a, b) => b.interestLevel - a.interestLevel).map((up, index) => (
-            <div key={index} className='flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 group'>
-              <span>{up.place_name.replace(', United States', '')}</span>
-              <button
-                onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
-                className="mr-0.5 flex items-center justify-center font-extrabold w-5 h-4 rounded bg-zinc-800 group-hover:brightness-125 group-hover:shadow hover:bg-rose-900 duration-100 ease-in-out">
-                <span className="h-[2px] w-[12px] rounded-full bg-zinc-900"></span>
-              </button>
-            </div>
+              <details key={index}>
+                <summary className="list-none">
+                  <div className='flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 group'>
+                    <div className="flex space-x-2 items-center">
+                      <span className="font-mono flex items-center justify-center h-6 w-6 bg-emerald-600 text-zinc-900 rounded-full">{up.interestLevel}</span> 
+                      <span>{up.place_name.split(',')[0]}</span>
+                    </div>
+                    <button
+                      onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
+                      className="mr-0.5 flex items-center justify-center font-extrabold w-5 h-4 rounded bg-zinc-800 group-hover:brightness-125 group-hover:shadow hover:bg-rose-900 duration-100 ease-in-out">
+                      <span className="h-[2px] w-[12px] rounded-full bg-zinc-900"></span>
+                    </button>
+                  </div>
+                </summary>
+                {/* content of a location */}
+                <div className="space-y-0.5">
+                  <textarea 
+                    spellCheck={false}
+                    onChange={(e) => setCurrentNote([up, e.currentTarget.value])}
+                    placeholder={`Jot down some notes about ${up.place_name.split(',')[0]}! 📝`}
+                    className="hover:resize-y focus:resize-y resize-none leading-[1.1rem] text-rose-200 w-full h-[3rem] rounded py-1 px-2 bg-zinc-700 hover:bg-zinc-600 focus:bg-zinc-600 shadow-inner duration-100 ease-in-out outline-none"
+                  ></textarea>
+                  <button 
+                    className="w-full bg-violet-500 hover:bg-violet-400 text-violet-900 rounded font-bold py-1 duration-100 ease-in-out"
+                    onClick={() => {
+                      if (currentNote[0] === up) {
+                        const updatedUserPlaces = userPlaces.filter(p => p !== up).concat({...up, notes: currentNote[1]});
+                        console.log(updatedUserPlaces);
+                        // setUserPlaces(userPlaces => [...userPlaces, {...up, notes: currentNote[1]}])
+                      }
+                      //setUserPlaces(userPlaces => [...userPlaces, {...up, note: currentNote[0] currentNote[1]}])
+                    }
+                  }
+                  >✓ Save Notes</button>
+                </div>
+              </details>
             ))) : 
             <p className="text-xs text-zinc-400 mt-1">No saved places yet! 🙀</p>}
           </div>
@@ -160,12 +191,12 @@ const MapPage = ():JSX.Element => {
                   type="range" 
                   min={0} max={10} value={interestLevel} 
                   onChange={(e) => setInterestLevel(+e.currentTarget.value)} 
-                  className="w-full"
+                  className="w-full outline-none"
                 />
                 <span className="font-mono">10</span>
               </div>
               <button 
-                className="bg-indigo-500 p-2 text-xl text-center w-full rounded hover:bg-indigo-400"
+                className="bg-indigo-500 p-2 text-xl text-center w-full rounded hover:bg-indigo-400 outline-none"
                 onClick={() => saveLocation(searchResult)}  
               >Save Location</button>
             </div>
