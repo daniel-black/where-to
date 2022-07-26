@@ -1,4 +1,4 @@
-import { initialViewport, MapStyle, Place } from "../constants";
+import { initialViewport, MapStyle, Place, colorScale } from "../constants";
 import { Map, Popup, GeolocateControl, Marker, NavigationControl, useControl, LngLat } from "react-map-gl";
 import React, { useEffect, useState } from "react";
 import {MapboxOverlay, MapboxOverlayProps} from '@deck.gl/mapbox/typed';
@@ -49,7 +49,6 @@ const MapPage = ():JSX.Element => {
     setShowPopup(false);
   }
 
-
   const getVal = (n: number): number => ((n / 10) * 255); 
 
   const arcData = homeLocation ? (userPlaces.map(up => ({
@@ -63,7 +62,6 @@ const MapPage = ():JSX.Element => {
       coordinates: up.geometry?.coordinates
     }
   }))) : [];
-  
   const arcLayerProps: ArcLayerProps = {
     id: 'arc-layer',
     data: arcData,
@@ -76,28 +74,13 @@ const MapPage = ():JSX.Element => {
     getSourceColor: d => [255, 70, 0, 125],
     getTargetColor: d => [0, getVal(d.interestLevel)* 0.5, getVal(d.interestLevel)],
   };
-
   const arcLayer = new ArcLayer(arcLayerProps);
-
-  const colorScale = [
-    'bg-green-500/20',
-    'bg-green-500/[24%]',
-    'bg-green-500/[28%]',
-    'bg-green-500/[37%]',
-    'bg-green-500/[46%]',
-    'bg-green-500/[55%]',
-    'bg-green-500/[64%]',
-    'bg-green-500/[73%]',
-    'bg-green-500/[82%]',
-    'bg-green-500/[91%]',
-    'bg-green-500',
-  ];
 
   return (
     <div className="flex  min-h-full">
-      {/* Side menu hides by default when on mobile */}
-      <div className='side-menu '>
-        <h1 className="text-3xl font-bold text-center">Where to?</h1>
+      {/* text-rose-100 bg-zinc-900 min-h-full w-1/3 shadow-xl border-r-4 border-zinc-800 divide-y-4 divide-zinc-800 space-y-3 p-3 */}
+      <div className='side-menu'>
+        <h1 className="text-3xl font-bold text-center">Where&nbsp;to?&nbsp;🔎</h1>
         <details>
           <summary className="list-none flex justify-between items-center p-2 hover:cursor-pointer rounded-b-xl duration-100 ease-in-out hover:bg-zinc-800">
             <span>📌 My Places</span><span className="flex justify-center items-center font-mono h-6 w-6 rounded-full bg-rose-500 text-zinc-900 hover:bg-rose-400 duration-100">{userPlaces.length}</span>
@@ -152,9 +135,9 @@ const MapPage = ():JSX.Element => {
         </details>
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
         {/* Control map pitch */}
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <input type="range" className="-rotate-90 mt-28 h-1 w-28" min={0} max={60} value={pitch} onChange={(e) => setPitch(+e.currentTarget.value)} />
-        </div>
+        </div> */}
       </div>
       
       <Map 
