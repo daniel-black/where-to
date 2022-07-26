@@ -33,7 +33,7 @@ export default function GeocoderControl(props: GeocoderControlProps) {
       marker: false,
       accessToken: props.mapboxAccessToken,
       countries: 'us',
-      placeholder: 'Find your new home :)',
+      placeholder: 'Find your new home',
       clearAndBlurOnEsc: true,
       types: 'place,locality,neighborhood',
     });

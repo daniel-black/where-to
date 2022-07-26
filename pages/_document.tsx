@@ -8,7 +8,7 @@ class Document extends NextDocument<Props> {
     return (
       <Html>
         <Head />
-        <body className='bg-slate-900 min-h-full min-w-full'>
+        <body className='bg-zinc-900 min-h-full min-w-full'>
           <Main />
           <NextScript />
         </body>

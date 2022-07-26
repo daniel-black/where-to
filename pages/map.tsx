@@ -228,8 +228,8 @@ const MapPage = ():JSX.Element => {
         )}
        
         <UserLocationMarker homeLocation={homeLocation} setHomeLocation={(l: LngLat) => setHomeLocation(l)} />
-        <NavigationControl position="top-right" />
-        <GeolocateControl position='bottom-right' />
+        {!isMobile && <NavigationControl position="top-right" />}
+        <GeolocateControl position={`${isMobile ? 'top' : 'bottom'}-right`} />
       </Map>
     
     </div>
