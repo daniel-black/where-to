@@ -3,6 +3,7 @@ import { Map, Popup, GeolocateControl, Marker, NavigationControl, useControl, Ln
 import React, { useEffect, useState } from "react";
 import {MapboxOverlay, MapboxOverlayProps} from '@deck.gl/mapbox/typed';
 import {ArcLayer, ArcLayerProps } from '@deck.gl/layers/typed';
+import type * as CSS from 'csstype';
 
 import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -10,7 +11,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import UserLocationMarker from '../components/userLocationMarker';
 import GeocoderControl from '../components/geocoderControl';
 import SelectMapStyle from "../components/selectMapStyle";
+import dynamic from "next/dynamic";
 
+const WidthHack = dynamic(() => import('../components/widthHack'), { ssr: false });
 
 function DeckGLOverlay(props: MapboxOverlayProps) {
   const overlay = useControl<MapboxOverlay>(() => new MapboxOverlay(props));
@@ -27,6 +30,7 @@ interface UserPlace extends Place {
 // Check out FlowMapBlue
 const MapPage = ():JSX.Element => {
   const [pitch, setPitch] = useState(30);
+  const [width, setWidth] = useState<number | null>(null);
   const [homeLocation, setHomeLocation] = useState<LngLat | null>(null);
   const [mapStyle, setMapStyle] = useState(MapStyle.Dark);
   const [viewport, setViewport] = useState(initialViewport);
@@ -35,7 +39,16 @@ const MapPage = ():JSX.Element => {
   const [showPopup, setShowPopup] = useState(false);
   const [userPlaces, setUserPlaces] = useState<UserPlace[]>([]);
   const [currentNote, setCurrentNote] = useState<[UserPlace | null, string]>([null, '']);
-  
+
+  const isMobile = width && width < 640;
+
+  // On mobile, want map to be full width and responsive in height, sitting below menu
+  // At a width of 640 pixels or greater, want map to be 1/2 or 2/3rds of the screen width
+  const mapStylesCSS: CSS.Properties = {
+    width: isMobile ? '100%' : '60%',
+    height: '100%',
+    background: '#18181b',
+  };
 
   useEffect(() => {
     setInterestLevel(5)
@@ -77,15 +90,15 @@ const MapPage = ():JSX.Element => {
   const arcLayer = new ArcLayer(arcLayerProps);
 
   return (
-    <div className="flex  min-h-full">
-      {/* text-rose-100 bg-zinc-900 min-h-full w-1/3 shadow-xl border-r-4 border-zinc-800 divide-y-4 divide-zinc-800 space-y-3 p-3 */}
-      <div className='side-menu'>
+    <div className="flex flex-col order-first sm:flex-row h-screen">
+      <WidthHack setWidth={(w) => setWidth(w)} />
+      <div className='bg-zinc-900 text-rose-100 p-2 space-y-2 divide-y-2 divide-zinc-800 border-b-4 border-zinc-800 w-full h-fit sm:h-full sm:border-b-0 sm:border-r-4 sm:w-[40%]'>
         <h1 className="text-3xl font-bold text-center">Where&nbsp;to?&nbsp;🔎</h1>
         <details>
           <summary className="list-none flex justify-between items-center p-2 hover:cursor-pointer rounded-b-xl duration-100 ease-in-out hover:bg-zinc-800">
             <span>📌 My Places</span><span className="flex justify-center items-center font-mono h-6 w-6 rounded-full bg-rose-500 text-zinc-900 hover:bg-rose-400 duration-100">{userPlaces.length}</span>
           </summary>
-          <div className="ml-7">
+          <div className="sm:ml-7">
             {userPlaces.length > 0 ? (userPlaces.sort((a, b) => b.interestLevel - a.interestLevel).map((up, index) => (
               <details key={index}>
                 <summary className="list-none">
@@ -102,7 +115,7 @@ const MapPage = ():JSX.Element => {
                     </div>
                     <button
                       onClick={() => setUserPlaces(userPlaces.filter(up => userPlaces.indexOf(up) !== index))} 
-                      className="mr-0.5 flex items-center justify-center font-extrabold w-5 h-4 rounded bg-zinc-800 group-hover:brightness-125 group-hover:shadow hover:bg-rose-900 duration-100 ease-in-out">
+                      className="mr-1 flex items-center justify-center font-extrabold w-5 h-4 rounded bg-zinc-800 group-hover:brightness-125 group-hover:shadow hover:bg-rose-900 duration-100 ease-in-out">
                       <span className="h-[2px] w-[12px] rounded-full bg-zinc-900"></span>
                     </button>
                   </div>
@@ -130,7 +143,7 @@ const MapPage = ():JSX.Element => {
                 </div>
               </details>
             ))) : 
-            <p className="text-xs text-zinc-400 mt-1">No saved places yet! 🙀</p>}
+            <p className="text-center text-xs text-zinc-400 mt-1">No saved places yet! 🙀</p>}
           </div>
         </details>
         <SelectMapStyle mapStyle={mapStyle} handleChange={(style: MapStyle) => setMapStyle(style)} />
@@ -143,7 +156,7 @@ const MapPage = ():JSX.Element => {
       <Map 
         {...viewport}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-        style={{width: '100vw', height: '100vh', overflow: 'hidden'}}
+        style={mapStylesCSS}        
         onMove={e => setViewport(e.viewState)}
         attributionControl={false}
         mapStyle={mapStyle}
@@ -166,7 +179,7 @@ const MapPage = ():JSX.Element => {
         
         <GeocoderControl 
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
-          position='top-right'
+          position='top-left'
           marker={true}
           onResult={(e) => setSearchResult(e.result)}
           // onLoading={(e) => console.dir(e)}
@@ -215,7 +228,7 @@ const MapPage = ():JSX.Element => {
         )}
        
         <UserLocationMarker homeLocation={homeLocation} setHomeLocation={(l: LngLat) => setHomeLocation(l)} />
-        <NavigationControl position="bottom-right" />
+        <NavigationControl position="top-right" />
         <GeolocateControl position='bottom-right' />
       </Map>
     

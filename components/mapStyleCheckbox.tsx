@@ -7,7 +7,11 @@ type MapStyleCheckboxProps = SelectMapStyleProps & {
 }
 
 const MapStyleCheckbox = (props: MapStyleCheckboxProps): JSX.Element => (
-  <div className={`${props.mapStyle === MapStyle[props.styleKey] ? 'bg-zinc-800' : ''} flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 cursor-pointer`}>
+  <div 
+    className={`${props.mapStyle === MapStyle[props.styleKey] ? 'bg-zinc-800' : ''} 
+              flex items-center justify-between my-0.5 p-1 rounded hover:bg-zinc-800 
+              cursor-pointer pr-6 sm:pr-7`}
+    >
     <label 
       className="flex space-x-2 w-full cursor-pointer"
       htmlFor={`${props.styleKey}-theme`}>

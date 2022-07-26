@@ -9,7 +9,7 @@ export interface SelectMapStyleProps  {
 export const SelectMapStyle = (props: SelectMapStyleProps): JSX.Element => (
   <details>
     <summary className="list-none p-2 hover:cursor-pointer rounded-b-xl duration-100 ease-in-out hover:bg-zinc-800">🗺️ Map Theme</summary>
-    <div className="ml-7">
+    <div className={'flex flex-wrap gap-x-2 sm:gap-x-4 gap-y-0.5 sm:gap-y-1'}>
       <MapStyleCheckbox {...props} styleKey='Outdoors' emoji="🌳"/>
       <MapStyleCheckbox {...props} styleKey='Satellite' emoji="🌎" />
       <MapStyleCheckbox {...props} styleKey='Streets' emoji="🛣️" />
