@@ -39,7 +39,7 @@ export interface Place {
   type?: string,
   context?: Context[],
   properties?: Object
-}
+};
 
 export interface Context {
   id: string,
@@ -48,4 +48,18 @@ export interface Context {
   text: string,
   'text_en-US': string,
   wikidata: string
-}
+};
+
+export const colorScale = [
+  'bg-green-500/20',
+  'bg-green-500/[24%]',
+  'bg-green-500/[28%]',
+  'bg-green-500/[37%]',
+  'bg-green-500/[46%]',
+  'bg-green-500/[55%]',
+  'bg-green-500/[64%]',
+  'bg-green-500/[73%]',
+  'bg-green-500/[82%]',
+  'bg-green-500/[91%]',
+  'bg-green-500',
+];

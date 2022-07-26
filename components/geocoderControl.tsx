@@ -34,7 +34,6 @@ export default function GeocoderControl(props: GeocoderControlProps) {
       accessToken: props.mapboxAccessToken,
       countries: 'us',
       placeholder: 'Find your new home :)',
-      collapsed: true,
       clearAndBlurOnEsc: true,
       types: 'place,locality,neighborhood',
     });
