@@ -34,3 +34,7 @@ I also still need to get auth set up and figure out the shape of the data I'll b
 
 ### 7/23/22:
 Figured out how to properly use the geocoder to search for locations. Figured out how to add and delete locations from My Places. When saving a place, users have to mark their interest level in the place. I'll key off this value to color the arcs. Improved styling and map controls. Added arcs in between the home location and saved locations. Going to add a "reset map" button and maybe a max zoom limit because zooming out is a pain right now. Need to the add the ability to revisit / focus on a saved location. 
+
+### 7/25/22:
+Figured out a hacky way to get access to the window width so I can change how the Map component is styled 
+at different different screen widths. Need to setup auth and persist user data. Also need to sleep more. 
