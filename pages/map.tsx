@@ -1,6 +1,7 @@
-import { initialViewport, MapStyle, Place, colorScale } from "../constants";
+import { initialViewport, MapStyle, Place } from "../constants";
 import { Map, Popup, GeolocateControl, Marker, NavigationControl, useControl, LngLat } from "react-map-gl";
-import React, { useEffect, useState } from "react";
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+import React, { LegacyRef, useEffect, useState } from "react";
 import {MapboxOverlay, MapboxOverlayProps} from '@deck.gl/mapbox/typed';
 import {ArcLayer, ArcLayerProps } from '@deck.gl/layers/typed';
 import type * as CSS from 'csstype';
@@ -29,6 +30,7 @@ interface UserPlace extends Place {
 
 // Check out FlowMapBlue
 const MapPage = ():JSX.Element => {
+  const [placesDiv] = useAutoAnimate() as [LegacyRef<HTMLDivElement>];
   const [pitch, setPitch] = useState(30);
   const [width, setWidth] = useState<number | null>(null);
   const [homeLocation, setHomeLocation] = useState<LngLat | null>(null);
@@ -89,6 +91,20 @@ const MapPage = ():JSX.Element => {
   };
   const arcLayer = new ArcLayer(arcLayerProps);
 
+  const colorScale = [
+    'bg-green-500/20',
+    'bg-green-500/[24%]',
+    'bg-green-500/[28%]',
+    'bg-green-500/[37%]',
+    'bg-green-500/[46%]',
+    'bg-green-500/[55%]',
+    'bg-green-500/[64%]',
+    'bg-green-500/[73%]',
+    'bg-green-500/[82%]',
+    'bg-green-500/[91%]',
+    'bg-green-500',
+  ];
+
   return (
     <div className="flex flex-col order-first sm:flex-row h-screen">
       <WidthHack setWidth={(w) => setWidth(w)} />
@@ -98,7 +114,7 @@ const MapPage = ():JSX.Element => {
           <summary className="list-none flex justify-between items-center p-2 hover:cursor-pointer rounded-b-xl duration-100 ease-in-out hover:bg-zinc-800">
             <span>📌 My Places</span><span className="flex justify-center items-center font-mono h-6 w-6 rounded-full bg-rose-500 text-zinc-900 hover:bg-rose-400 duration-100">{userPlaces.length}</span>
           </summary>
-          <div className="sm:ml-7">
+          <div className="sm:ml-7" ref={placesDiv}>
             {userPlaces.length > 0 ? (userPlaces.sort((a, b) => b.interestLevel - a.interestLevel).map((up, index) => (
               <details key={index}>
                 <summary className="list-none">
