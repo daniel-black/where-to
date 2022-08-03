@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 
 const WidthHack = dynamic(() => import('../components/widthHack'), { ssr: false });
 
+
 function DeckGLOverlay(props: MapboxOverlayProps) {
   const overlay = useControl<MapboxOverlay>(() => new MapboxOverlay(props));
   overlay.setProps(props);
